@@ -4,9 +4,14 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:SabakaBrowser"
+        xmlns:wpf="clr-namespace:CefSharp.Wpf;assembly=CefSharp.Wpf"
         mc:Ignorable="d"
-        Title="SabakaBrowser" Height="450" Width="800">
-    <Grid>
-        
-    </Grid>
+        Title="SabakaBrowser" Height="1080" Width="1920">
+    <DockPanel Background="DarkSlateGray">
+        <StackPanel Orientation="Horizontal" DockPanel.Dock="Top">
+            <TextBox x:Name="AddressBar" Width="1920" Height="30" KeyDown="AddressBar_KeyDown" Background="DarkSlateGray" FontFamily="Jetbrains Mono" Foreground="White" FontSize="20"/>
+        </StackPanel>
+
+        <wpf:ChromiumWebBrowser x:Name="Browser"/>
+    </DockPanel>
 </Window>
