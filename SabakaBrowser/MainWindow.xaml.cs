@@ -8,13 +8,18 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using CefSharp.Wpf;
 
-namespace SabakaBrowser;
-
-public partial class MainWindow : Window
+namespace SabakaBrowser
 {
-    public MainWindow()
+    public partial class MainWindow : Window
     {
-        InitializeComponent();
+        public MainWindow()
+        {
+            InitializeComponent();
+            var browser = new ChromiumWebBrowser("https://www.google.com");
+            this.Content = browser;
+        }
     }
 }
+

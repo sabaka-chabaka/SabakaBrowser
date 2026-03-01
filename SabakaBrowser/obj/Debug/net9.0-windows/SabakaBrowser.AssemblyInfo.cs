@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("SabakaBrowser")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+539f8472b73496e815cd8ca14c4408ddfac9658f")]
 [assembly: System.Reflection.AssemblyProductAttribute("SabakaBrowser")]
 [assembly: System.Reflection.AssemblyTitleAttribute("SabakaBrowser")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

@@ -2,14 +2,13 @@
 
     <PropertyGroup>
         <OutputType>WinExe</OutputType>
-        <TargetFramework>net9.0-windows</TargetFramework>
-        <Nullable>enable</Nullable>
-        <ImplicitUsings>enable</ImplicitUsings>
+        <TargetFramework>net48</TargetFramework>
         <UseWPF>true</UseWPF>
+        <PlatformTarget>x64</PlatformTarget>
     </PropertyGroup>
 
     <ItemGroup>
-      <PackageReference Include="CefSharp.Wpf" Version="145.0.260" />
+        <PackageReference Include="CefSharp.Wpf" Version="145.0.260" />
     </ItemGroup>
 
 </Project>
