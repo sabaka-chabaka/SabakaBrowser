@@ -39,5 +39,22 @@ namespace SabakaBrowser
 
             Browser.Load(url);
         }
+        
+        private void BackButton_Click(object sender, RoutedEventArgs e)
+        {
+            if (Browser.CanGoBack)
+                Browser.Back();
+        }
+
+        private void ForwardButton_Click(object sender, RoutedEventArgs e)
+        {
+            if (Browser.CanGoForward)
+                Browser.Forward();
+        }
+
+        private void ReloadButton_Click(object sender, RoutedEventArgs e)
+        {
+            Browser.Reload();
+        }
     }
 }
