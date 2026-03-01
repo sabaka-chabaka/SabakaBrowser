@@ -11,7 +11,16 @@ namespace SabakaBrowser
         {
             InitializeComponent();
 
+            System.Windows.Media.RenderOptions.ProcessRenderMode = System.Windows.Interop.RenderMode.Default;
+
             Browser.Address = "https://www.google.com";
+
+            Browser.BrowserSettings = new CefSharp.BrowserSettings
+            {
+                WindowlessFrameRate = 60,
+                BackgroundColor = Cef.ColorSetARGB(255, 255, 255, 255)
+            };
+
             WindowState = WindowState.Maximized;
         }
 
