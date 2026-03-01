@@ -14,7 +14,8 @@ namespace SabakaBrowser
             System.Windows.Media.RenderOptions.ProcessRenderMode = System.Windows.Interop.RenderMode.Default;
 
             Browser.Address = "https://www.google.com";
-
+            AddressBar.Text = "https://www.google.com";
+            
             Browser.BrowserSettings = new CefSharp.BrowserSettings
             {
                 WindowlessFrameRate = 60,
