@@ -6,6 +6,7 @@ using System.Windows.Input;
 using System.Text;
 using System.IO;
 using System.Collections.Generic;
+using System.Windows.Controls;
 using Newtonsoft.Json;
 
 namespace SabakaBrowser
@@ -15,29 +16,28 @@ namespace SabakaBrowser
         private List<HistoryItem> _history = new();
         private string historyFile = "history.json";
         
+        private ChromiumWebBrowser? GetCurrentBrowser()
+        {
+            if (BrowserTabs.SelectedItem is TabItem tab &&
+                tab.Content is ChromiumWebBrowser browser)
+                return browser;
+
+            return null;
+        }
+        
         public MainWindow()
         {
             InitializeComponent();
 
             System.Windows.Media.RenderOptions.ProcessRenderMode = System.Windows.Interop.RenderMode.Default;
 
-            Browser.Address = "https://www.google.com";
             AddressBar.Text = "https://www.google.com";
-            
-            Browser.BrowserSettings = new CefSharp.BrowserSettings
-            {
-                WindowlessFrameRate = 60,
-                BackgroundColor = Cef.ColorSetARGB(255, 255, 255, 255)
-            };
-
-            Browser.AddressChanged += Browser_AddressChanged;
 
             WindowState = WindowState.Maximized;
             
             LoadHistory();
             
-            Browser.TitleChanged += Browser_TitleChanged;
-            Browser.LoadingStateChanged += Browser_LoadingStateChanged;
+            AddNewTab();
         }
 
         private void LoadHistory()
@@ -60,78 +60,132 @@ namespace SabakaBrowser
             File.WriteAllText(historyFile, json);
         }
         
-        
-        
-        private void Browser_LoadingStateChanged(object sender, CefSharp.LoadingStateChangedEventArgs e)
+        private void AddTab_Click(object sender, RoutedEventArgs e)
         {
-            if (!e.IsLoading)
-            {
-                Dispatcher.Invoke(() =>
-                {
-                    AddressBar.Text = Browser.Address;
-                });
-            }
+            AddNewTab();
         }
         
-        private void Browser_AddressChanged(object sender, DependencyPropertyChangedEventArgs e)
+        private void AddToHistory(string url, string title)
         {
-            AddressBar.Text = e.NewValue.ToString();
-        }
-        
-        private void Browser_TitleChanged(object sender, DependencyPropertyChangedEventArgs e)
-        {
-            var title = e.NewValue?.ToString();
-            var url = Browser.Address;
-
             if (string.IsNullOrEmpty(url))
                 return;
 
-            Dispatcher.Invoke(() =>
+            // защита от дублей подряд
+            if (_history.Count > 0 && _history[1].Url == url)
+                return;
+
+            _history.Add(new HistoryItem
             {
-                this.Title = $"{title} - Sabaka Browser"; // Заголовок окна
-
-                _history.Add(new HistoryItem
-                {
-                    Url = url,
-                    Title = title,
-                    VisitTime = DateTime.Now
-                });
-
-                SaveHistory();
+                Url = url,
+                Title = title,
+                VisitTime = DateTime.Now
             });
+
+            SaveHistory();
+        }
+        
+        private void AddNewTab(string url = "https://google.com")
+        {
+            var browser = new ChromiumWebBrowser(url);
+
+            var headerPanel = new StackPanel { Orientation = Orientation.Horizontal,  };
+            var titleBlock = new TextBlock
+            {
+                Text = "Новая вкладка",
+                Margin = new Thickness(0, 0, 5, 0)
+            };
+
+            var closeButton = new Button
+            {
+                Content = "✕",
+                Width = 20,
+                Height = 20,
+                Padding = new Thickness(0),
+                Margin = new Thickness(0),
+                Background = null,
+                BorderThickness = new Thickness(0),
+                Cursor = Cursors.Hand
+            };
+
+            headerPanel.Children.Add(titleBlock);
+            headerPanel.Children.Add(closeButton);
+            
+            var tab = new TabItem
+            {
+                Header = "Новая вкладка",
+                Content = browser
+            };
+
+            BrowserTabs.Items.Add(tab);
+            BrowserTabs.SelectedItem = tab;
+
+            // Title
+            browser.TitleChanged += (s, e) =>
+            {
+                Dispatcher.Invoke(() =>
+                {
+                    var title = e.NewValue?.ToString() ?? "Новая вкладка";
+                    tab.Header = title;
+
+                    if (BrowserTabs.SelectedItem == tab)
+                        this.Title = $"{title} - Sabaka Browser";
+
+                    AddToHistory(browser.Address, title);
+                });
+            };
+
+            // Address
+            browser.AddressChanged += (s, e) =>
+            {
+                Dispatcher.Invoke(() =>
+                {
+                    if (BrowserTabs.SelectedItem == tab)
+                        AddressBar.Text = e.NewValue.ToString();
+                });
+            };
+            
+            closeButton.Click += (s, e) =>
+            {
+                // Освобождаем ресурсы браузера
+                browser.Dispose();
+                BrowserTabs.Items.Remove(tab);
+            };
+
         }
 
         private void AddressBar_KeyDown(object sender, KeyEventArgs e)
         {
             if (e.Key == Key.Enter)
             {
-                Navigate(AddressBar.Text);
+                var browser = GetCurrentBrowser();
+                if (browser == null) return;
+
+                var url = AddressBar.Text;
+
+                if (!url.StartsWith("http"))
+                    url = "https://" + url;
+
+                browser.Load(url);
             }
-        }
-
-        private void Navigate(string url)
-        {
-            if (!url.StartsWith("http"))
-                url = "https://" + url;
-
-            Browser.Load(url);
         }
         
         private void BackButton_Click(object sender, RoutedEventArgs e)
         {
-            if (Browser.CanGoBack)
-                Browser.Back();
+            var browser = GetCurrentBrowser();
+            if (browser?.CanGoBack == true)
+                browser.Back();
         }
 
         private void ForwardButton_Click(object sender, RoutedEventArgs e)
         {
-            if (Browser.CanGoForward)
-                Browser.Forward();
+            var browser = GetCurrentBrowser();
+            if (browser?.CanGoForward == true)
+                browser.Forward();
         }
 
         private void ReloadButton_Click(object sender, RoutedEventArgs e)
         {
-            Browser.Reload();
+            GetCurrentBrowser()?.Reload();
         }
         
         private void History_Click(object sender, RoutedEventArgs e)
@@ -140,7 +194,7 @@ namespace SabakaBrowser
 
             if (window.ShowDialog() == true && window.SelectedUrl != null)
             {
-                Browser.Load(window.SelectedUrl);
+                GetCurrentBrowser()?.Load(window.SelectedUrl);
             }
         }
     }

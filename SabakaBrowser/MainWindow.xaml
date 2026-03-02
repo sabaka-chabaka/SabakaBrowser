@@ -9,6 +9,9 @@
         Title="SabakaBrowser" Height="1080" Width="1920">
     <DockPanel Background="DarkSlateGray">
         <StackPanel Orientation="Horizontal" DockPanel.Dock="Top">
+            <Button Content="+" Width="30" Click="AddTab_Click"/>
+        </StackPanel>
+        <StackPanel Orientation="Horizontal" DockPanel.Dock="Top">
             <Button Content="◀" Width="40" Height="30" Click="BackButton_Click" Foreground="White" Background="DarkSlateGray"/>
             <Button Content="▶" Width="40" Height="30" Margin="5,0,0,0" Click="ForwardButton_Click" Foreground="White" Background="DarkSlateGray"/>
             <Button Content="⟳" Width="40" Height="30" Margin="5,0,0,0" Click="ReloadButton_Click" Foreground="White" Background="DarkSlateGray"/>
@@ -16,6 +19,6 @@
             <Button Content="History" Width="80" Click="History_Click" Foreground="White" Background="DarkSlateGray" FontFamily="Jetbrains Mono"/>
         </StackPanel>
 
-        <wpf:ChromiumWebBrowser x:Name="Browser"/>
+        <TabControl x:Name="BrowserTabs"/>
     </DockPanel>
 </Window>
