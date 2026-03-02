@@ -6,8 +6,8 @@
         xmlns:local="clr-namespace:SabakaBrowser"
         mc:Ignorable="d"
         Title="HistoryWindow" Height="450" Width="800">
-    <Grid>
+    <Grid Background="DarkSlateGray">
         <ListBox x:Name="HistoryList"
-                 MouseDoubleClick="HistoryList_DoubleClick"/>
+                 MouseDoubleClick="HistoryList_DoubleClick" Background="DarkSlateGray" Foreground="White"/>
     </Grid>
 </Window>
