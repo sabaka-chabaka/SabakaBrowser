@@ -5,10 +5,12 @@
         <TargetFramework>net48</TargetFramework>
         <UseWPF>true</UseWPF>
         <PlatformTarget>x64</PlatformTarget>
+        <LangVersion>latest</LangVersion>
     </PropertyGroup>
 
     <ItemGroup>
         <PackageReference Include="CefSharp.Wpf" Version="145.0.260" />
+        <PackageReference Include="Newtonsoft.Json" Version="13.0.5-beta1" />
     </ItemGroup>
 
 </Project>

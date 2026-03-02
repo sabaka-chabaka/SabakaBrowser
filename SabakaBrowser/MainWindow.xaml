@@ -12,7 +12,8 @@
             <Button Content="◀" Width="40" Height="30" Click="BackButton_Click" Foreground="White" Background="DarkSlateGray"/>
             <Button Content="▶" Width="40" Height="30" Margin="5,0,0,0" Click="ForwardButton_Click" Foreground="White" Background="DarkSlateGray"/>
             <Button Content="⟳" Width="40" Height="30" Margin="5,0,0,0" Click="ReloadButton_Click" Foreground="White" Background="DarkSlateGray"/>
-            <TextBox x:Name="AddressBar" Width="1800" Height="30" KeyDown="AddressBar_KeyDown" Background="DarkSlateGray" FontFamily="Jetbrains Mono" Foreground="White" FontSize="20"/>
+            <TextBox x:Name="AddressBar" Width="1720" Height="30" KeyDown="AddressBar_KeyDown" Background="DarkSlateGray" FontFamily="Jetbrains Mono" Foreground="White" FontSize="20"/>
+            <Button Content="History" Width="80" Click="History_Click"/>
         </StackPanel>
 
         <wpf:ChromiumWebBrowser x:Name="Browser"/>
