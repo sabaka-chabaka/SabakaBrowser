@@ -12,7 +12,8 @@ public partial class App : Application
         settings.CefCommandLineArgs.Add("disable-gpu-compositing", "0");
         settings.CefCommandLineArgs.Add("enable-gpu-rasterization", "1");
         settings.CefCommandLineArgs.Add("enable-zero-copy", "1");
-
+        settings.CachePath = "CefCache";
+        
         Cef.Initialize(settings, performDependencyCheck: true, browserProcessHandler: null);
 
         base.OnStartup(e);

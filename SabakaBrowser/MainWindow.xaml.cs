@@ -22,8 +22,16 @@ namespace SabakaBrowser
                 BackgroundColor = Cef.ColorSetARGB(255, 255, 255, 255)
             };
 
+            Browser.AddressChanged += Browser_AddressChanged;
+
             WindowState = WindowState.Maximized;
         }
+
+        private void Browser_AddressChanged(object sender, DependencyPropertyChangedEventArgs e)
+        {
+            AddressBar.Text = e.NewValue.ToString();
+        }
+        
 
         private void AddressBar_KeyDown(object sender, KeyEventArgs e)
         {
