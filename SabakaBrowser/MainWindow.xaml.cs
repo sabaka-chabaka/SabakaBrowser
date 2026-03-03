@@ -162,11 +162,31 @@ namespace SabakaBrowser
 
                 var url = AddressBar.Text;
 
-                if (!url.StartsWith("http"))
-                    url = "https://" + url;
+                if (Uri.TryCreate(url, UriKind.Absolute, out Uri result) &&
+                    (result.Scheme == Uri.UriSchemeHttp || result.Scheme == Uri.UriSchemeHttps))
+                {
+                    if (!url.StartsWith("http"))
+                        url = "https://" + url;
 
-                browser.Load(url);
+                    browser.Load(url);
+                }
+                else if (IsLikelyDomain(url))
+                {
+                    if (!url.StartsWith("http"))
+                        url = "https://" + url;
+
+                    browser.Load(url);
+                }
+                else
+                {
+                    browser.Load("https://www.google.com/search?q=" + Uri.EscapeDataString(url));
+                }
             }
+        }
+        
+        private bool IsLikelyDomain(string input)
+        {
+            return input.Contains(".") && !input.Contains(" ");
         }
         
         private void BackButton_Click(object sender, RoutedEventArgs e)
